@@ -1,35 +1,112 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import { usuarioService } from './services/usuarioService';
+import FormularioUsuario from './components/FormularioUsuario';
+import TablaUsuarios from './components/TablaUsuarios';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [usuarios, setUsuarios] = useState([]);
+  const [formulario, setFormulario] = useState({
+    id: null,
+    nombre: '',
+    email: '',
+    edad: ''
+  });
+  const [editando, setEditando] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    cargarUsuarios();
+  }, []);
+
+  const cargarUsuarios = async () => {
+    setLoading(true);
+    try {
+      const data = await usuarioService.getAll();
+      setUsuarios(data);
+    } catch (error) {
+      console.error('Error al cargar usuarios:', error);
+      alert('Error al cargar usuarios');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditar = async (id) => {
+    try {
+      const data = await usuarioService.getById(id);
+      setFormulario(data);
+      setEditando(true);
+    } catch (error) {
+      console.error('Error al obtener usuario:', error);
+      alert('Error al obtener usuario');
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!formulario.nombre || !formulario.email) {
+      alert('Por favor completa nombre y email');
+      return;
+    }
+
+    try {
+      const success = editando 
+        ? await usuarioService.update(formulario)
+        : await usuarioService.save(formulario);
+
+      if (success) {
+        alert(`Usuario ${editando ? 'actualizado' : 'guardado'} exitosamente`);
+        limpiarFormulario();
+        cargarUsuarios();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al guardar usuario');
+    }
+  };
+
+  const handleEliminar = async (id) => {
+    if (!window.confirm('¿Estás seguro de eliminar este usuario?')) {
+      return;
+    }
+
+    try {
+      const success = await usuarioService.delete(id);
+      if (success) {
+        alert('Usuario eliminado exitosamente');
+        cargarUsuarios();
+      }
+    } catch (error) {
+      console.error('Error al eliminar usuario:', error);
+      alert('Error al eliminar usuario');
+    }
+  };
+
+  const limpiarFormulario = () => {
+    setFormulario({ id: null, nombre: '', email: '', edad: '' });
+    setEditando(false);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-800 mb-8">CRUD de Usuarios</h1>
+        
+        <FormularioUsuario
+          formulario={formulario}
+          setFormulario={setFormulario}
+          editando={editando}
+          onSubmit={handleSubmit}
+          onCancelar={limpiarFormulario}
+        />
 
-export default App
+        <TablaUsuarios
+          usuarios={usuarios}
+          loading={loading}
+          onEditar={handleEditar}
+          onEliminar={handleEliminar}
+          onRecargar={cargarUsuarios}
+        />
+      </div>
+    </div>
+  );
+}
