@@ -24,8 +24,8 @@ export default function TablaUsuarios({ usuarios, loading, onEditar, onEliminar,
               <tr>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">ID</th>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Nombre</th>
-                <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Email</th>
-                <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Edad</th>
+                <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Correo</th>
+                <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Telefono</th>
                 <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Acciones</th>
               </tr>
             </thead>
@@ -34,8 +34,8 @@ export default function TablaUsuarios({ usuarios, loading, onEditar, onEliminar,
                 <tr key={usuario.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3 text-sm text-gray-900">{usuario.id}</td>
                   <td className="px-4 py-3 text-sm text-gray-900">{usuario.nombre}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{usuario.email}</td>
-                  <td className="px-4 py-3 text-sm text-gray-900">{usuario.edad}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900">{usuario.correo}</td>
+                  <td className="px-4 py-3 text-sm text-gray-900">{usuario.telefono}</td>
                   <td className="px-4 py-3 text-sm">
                     <button
                       onClick={() => onEditar(usuario.id)}

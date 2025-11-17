@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/usuarios")
+@RequestMapping("/sgu-api/usuarios")
 @AllArgsConstructor
 @CrossOrigin(origins = {"*"})
 public class UsuarioController {

@@ -23,12 +23,12 @@ export default function FormularioUsuario({ formulario, setFormulario, editando,
         
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email *
+            Correo *
           </label>
           <input
             type="email"
-            value={formulario.email}
-            onChange={(e) => setFormulario({...formulario, email: e.target.value})}
+            value={formulario.correo}
+            onChange={(e) => setFormulario({...formulario, correo: e.target.value})}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="correo@example.com"
           />
@@ -36,14 +36,14 @@ export default function FormularioUsuario({ formulario, setFormulario, editando,
         
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Edad
+            Telefono
           </label>
           <input
             type="number"
-            value={formulario.edad}
-            onChange={(e) => setFormulario({...formulario, edad: e.target.value})}
+            value={formulario.telefono}
+            onChange={(e) => setFormulario({...formulario, telefono: e.target.value})}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Edad"
+            placeholder="Telefono"
           />
         </div>
         

@@ -8,8 +8,8 @@ export default function App() {
   const [formulario, setFormulario] = useState({
     id: null,
     nombre: '',
-    email: '',
-    edad: ''
+    correo: '',
+    telefono: ''
   });
   const [editando, setEditando] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -43,8 +43,8 @@ export default function App() {
   };
 
   const handleSubmit = async () => {
-    if (!formulario.nombre || !formulario.email) {
-      alert('Por favor completa nombre y email');
+    if (!formulario.nombre || !formulario.correo) {
+      alert('Por favor completa nombre y correo');
       return;
     }
 
@@ -64,13 +64,13 @@ export default function App() {
     }
   };
 
-  const handleEliminar = async (id) => {
+  const handleEliminar = async () => {
     if (!window.confirm('¿Estás seguro de eliminar este usuario?')) {
       return;
     }
 
     try {
-      const success = await usuarioService.delete(id);
+      const success = await usuarioService.delete(formulario);
       if (success) {
         alert('Usuario eliminado exitosamente');
         cargarUsuarios();
@@ -82,7 +82,7 @@ export default function App() {
   };
 
   const limpiarFormulario = () => {
-    setFormulario({ id: null, nombre: '', email: '', edad: '' });
+    setFormulario({ id: null, nombre: '', correo: '', telefono: '' });
     setEditando(false);
   };
 

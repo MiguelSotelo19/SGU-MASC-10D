@@ -1,15 +1,19 @@
 const ENV = import.meta.env;
-const API_URL = `http://${ENV.VITE_API_HOST}:${ENV.VITE_API_PORT}${ENV.VITE_API_BASE}`;
+const API_URL = `http://${ENV.VITE_API_HOST}:${ENV.VITE_API_PORT}${ENV.VITE_API_BASE}/usuarios`;
 
 export const usuarioService = {
   async getAll() {
-    const response = await fetch(API_URL);
-    return await response.json();
+    const response = await fetch(`${API_URL}/`);
+    const result = await response.json();
+    // Extrae el array 'data' de la respuesta
+    return result.data || [];
   },
 
   async getById(id) {
     const response = await fetch(`${API_URL}/${id}`);
-    return await response.json();
+    const result = await response.json();
+    // Extrae el usuario del objeto 'user'
+    return result.user || result.data;
   },
 
   async save(usuario) {
@@ -20,7 +24,9 @@ export const usuarioService = {
       },
       body: JSON.stringify(usuario)
     });
-    return response.ok;
+    const result = await response.json();
+    // Verifica si la operación fue exitosa
+    return result.error === false;
   },
 
   async update(usuario) {
@@ -31,13 +37,19 @@ export const usuarioService = {
       },
       body: JSON.stringify(usuario)
     });
-    return response.ok;
+    const result = await response.json();
+    return result.error === false;
   },
 
-  async delete(id) {
-    const response = await fetch(`${API_URL}/delete?id=${id}`, {
-      method: 'DELETE'
+  async delete(usuario) {
+    const response = await fetch(`${API_URL}/delete`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(usuario)
     });
-    return response.ok;
+    const result = await response.json();
+    return result.error === false;
   }
 };
